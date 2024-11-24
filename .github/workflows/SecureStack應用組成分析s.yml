@@ -1,16 +1,19 @@
-- 名稱：SecureStack應用程式構成分析
-  # 您可以固定到確切的提交或版本。
-  # 使用：SecureStackCo/actions-code@c2c35840882d041474c505c1045da157025cd57e
-  使用：SecureStackCo/actions-code@v0.1.1
-  和：
-    # SecureStack API 金鑰 - 在 https://app.securestack.com 產生 API 金鑰
-    securestack_api_key：
-    # SecureStack 應用程式 ID - 可以透過造訪 https://app.securestack.com 上所需的應用程式來檢索
-    securestack_app_id：
-    # 低於此值的嚴重性將在工作流程控制台中報告，但不會導致操作出錯；值應該是以下之一： 關鍵 |高|中等|低的
-    嚴重程度：
-    # 低於此值的嚴重性將在工作流程控制台中報告，但不會導致操作出錯；值應該是以下之一： 關鍵 |高|中等|低的
-    語言：
-    # Bloodhound-cli code 命令的可選標誌 - 運行 Bloodhound cli code --help 以了解更多詳細信息
-    flags: # 可選，預設為
-          
+name: Example Workflow Using SecureStack Application Composition Analysis Action
+on: push
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo for running code analysis within workflow
+        id: checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0
+      - name: Code Analysis Step
+        id: code
+        uses: SecureStackCo/actions-code@v0.1.1
+        with:
+          securestack_api_key: ${{ secrets.SECURESTACK_API_KEY }}
+          securestack_app_id: ${{ secrets.SECURESTACK_APP_ID }}
+          severity: critical
+          language: node
